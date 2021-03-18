@@ -89,7 +89,7 @@ def flood_fill(image, start_row, start_col, new_color):
     Output:
     List[List[int]]
     """
-    # Your code here
+    # Got a phone call while coding this. This code really needs refactored... lol
     visited = set()
 
     for row in range(len(image)):
@@ -111,9 +111,8 @@ def flood_fill(image, start_row, start_col, new_color):
             if len(neighbors) > 0:
                 image[row][col] = new_color
 
-            # For each neighbor in
             while len(neighbors) > 0:
-                v2 = neighbors.pop(0)
+                v2 = neighbors.pop()
 
                 # If we've already visited this vert, let's skip it
                 if v2 in visited:
@@ -124,8 +123,6 @@ def flood_fill(image, start_row, start_col, new_color):
 
                 for j in get_neighbors(image, v2[0], v2[1], old_color):
                     neighbors.append(j)
-
-
 
     return image
 
