@@ -78,6 +78,29 @@ def get_neighbors(graph, start_row, start_col, color):
 
 print(get_neighbors(image, 1, 1, 1))
 
+def dft_helper(grid, start_row, start_col, visited, new_color):
+  stack = []
+  old_color = grid[start_row][start_col]
+
+  stack.append((start_row, start_col))
+  while len(stack) > 0:
+    currRow, currCol = stack.pop()
+
+    # If we've already visited, let's move on
+    if (currRow, currCol) in visited:
+      continue
+
+    # Add to our visited set
+    visited.add((currRow, currCol))
+
+    # Eval/change color
+    grid[currRow][currCol] = new_color
+
+    # Traverse the neighbors
+    for neighbor in get_neighbors(grid, currRow, currCol, old_color):
+      stack.append(neighbor)
+
+
 def flood_fill(image, start_row, start_col, new_color):
     """
     Inputs:
@@ -89,40 +112,10 @@ def flood_fill(image, start_row, start_col, new_color):
     Output:
     List[List[int]]
     """
-    # Got a phone call while coding this. This code really needs refactored... lol
     visited = set()
+    color_to_fill = image[0][0]
 
-    for row in range(len(image)):
-        for col in range(len(image[row])):
-            vert = (row, col)
-            old_color = image[row][col]
-
-            # If we've already visited this vert, let's skip it
-            if vert in visited:
-                continue
-
-            # Add the current vert to the visited dict
-            visited.add(vert)
-
-            # Find the neighbors of the vert
-            neighbors = get_neighbors(image, row, col, old_color)
-
-            # Color the current vert were on
-            if len(neighbors) > 0:
-                image[row][col] = new_color
-
-            while len(neighbors) > 0:
-                v2 = neighbors.pop()
-
-                # If we've already visited this vert, let's skip it
-                if v2 in visited:
-                    continue
-
-                visited.add(v2)
-                image[v2[0]][v2[1]] = new_color
-
-                for j in get_neighbors(image, v2[0], v2[1], old_color):
-                    neighbors.append(j)
+    dft_helper(image, 0, 0, visited, new_color)
 
     return image
 
